@@ -23,30 +23,33 @@ imagesc(cimage);
 hold on;
 scale_num = 20; % reduce the descriptor's num for comfortable view
 for i = 1: size(locs,1)/scale_num
-    % Draw the descriptor's boundary.
-    myTransformLine(locs(i*scale_num,:), 0.0-2, 0.0-2, 4.0-2, 0.0-2,0);
-    myTransformLine(locs(i*scale_num,:), 0.0-2, 0.0-2, 0.0-2, 4.0-2,0);
-    myTransformLine(locs(i*scale_num,:), 4.0-2, 0.0-2, 4.0-2, 4.0-2,0);
-    myTransformLine(locs(i*scale_num,:), 0.0-2, 4.0-2, 4.0-2, 4.0-2,0);
+    % Draw the descriptor's boundary.z HOG is 16X16 pixels
+    
+    myTransformLine(locs(i*scale_num,:), -8.0, -8.0, 8.0, -8.0, 0);
+    myTransformLine(locs(i*scale_num,:), -8.0, -8.0, -8.0, 8.0, 0);
+    myTransformLine(locs(i*scale_num,:), 8.0, -8.0, 8.0, 8.0, 0);
+    myTransformLine(locs(i*scale_num,:), -8.0, 8.0, 8.0, 8.0, 0);
     % Draw the descriptor's grid
     %   row
     for r = 1:3
-    myTransformLine(locs(i*scale_num,:), 0.0-2, 0.0-2+r, 4.0-2, 0.0-2+r,0);
+    myTransformLine(locs(i*scale_num,:), -8.0, -8.0+r*4, 8.0, -8.0+4*r, 0);
     end
     %   column
     for c = 1:3
-    myTransformLine(locs(i*scale_num,:), 0.0-2+c, 0.0-2, 0.0-2+c, 4.0-2,0);
+    myTransformLine(locs(i*scale_num,:), -8.0+4*c, -8.0, -8.0+4*c, 8.0, 0);
     end
     des = reshape(descriptors(i*scale_num,:),4,4,8);
     for ii = 1:4
         for jj = 1:4
             for d = 1:8
                 deg = (d-1)*pi/4;
-                % offset + scale*[roatation]X[x, y]
-                a1 = [-1.5+ii-1;1.5-jj+1]+des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[0.0 ; 0.0];
-                a2 = [-1.5+ii-1;1.5-jj+1]+des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[1.0 ; 0.0];
-                a3 = [-1.5+ii-1;1.5-jj+1]+des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[0.85 ; 0.1];
-                a4 = [-1.5+ii-1;1.5-jj+1]+des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[0.85 ; -0.1];
+                % offset + 2*scale*[roatation]X[x, y]
+                %   *4 is beacause the size of the one block(4x4) in
+                %   HoG(16x16) is 4 pixels
+                a1 = [-6+4*(ii-1);6-4*(jj-1)]+4*des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[0.0 ; 0.0];
+                a2 = [-6+4*(ii-1);6-4*(jj-1)]+4*des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[1.0 ; 0.0];
+                a3 = [-6+4*(ii-1);6-4*(jj-1)]+4*des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[0.85 ; 0.1];
+                a4 = [-6+4*(ii-1);6-4*(jj-1)]+4*des(ii,jj,d)*[cos(deg) -sin(deg); sin(deg) cos(deg)]*[0.85 ; -0.1];
                 myTransformLine(locs(i*scale_num,:), a1(1,1), a1(2,1), a2(1,1), a2(2,1),1);
                 myTransformLine(locs(i*scale_num,:), a3(1,1), a3(2,1), a2(1,1), a2(2,1),1);
                 myTransformLine(locs(i*scale_num,:), a4(1,1), a4(2,1), a2(1,1), a2(2,1),1);
@@ -61,7 +64,7 @@ function myTransformLine(keypoint, x1, y1, x2, y2,is_arrow)
 
 % The scaling of the unit length arrow is set to approximately the radius
 %   of the region used to compute the keypoint descriptor.
-len = 3*keypoint(3);
+len = keypoint(3);
 
 % Rotate the keypoints by 'ori' = keypoint(4)
 s = sin(keypoint(4));
