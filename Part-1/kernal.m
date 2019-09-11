@@ -84,7 +84,7 @@ figure;imshow(output)
 %       szie = 1x2, 2-type-A haar mask size = 3x1, xzf 2-type-B mask size = 1x3
 %       ,and 3-type haar mask = 2x2
 %   haar like feature explanation[https://www.youtube.com/watch?v=F5rysk51txQ]
-h_size = 1;     %########################################################## Please edit size here
+h_size = 2;     %########################################################## Please edit size here
                 %########################################################## 
 % Construct kernal
 haar_kernel1 = -ones(2*h_size,1*h_size); % 1-type-A
