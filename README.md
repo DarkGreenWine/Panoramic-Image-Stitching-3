@@ -9,7 +9,7 @@ pass
 
 ## Part-2: SIFT Features and Descriptors
 
-My code is reference from **[Demo Software: SIFT Keypoint Detector](https://www.cs.ubc.ca/~lowe/keypoints/)**. What's more , I also used `sift.m` and `siftWin32.exe` as core part of SIFT Features and Descriptors.  **Please use Demo carefully, the author has the patent of Demo Software.**
+My code references from **[Demo Software: SIFT Keypoint Detector](https://www.cs.ubc.ca/~lowe/keypoints/)**. What's more , I also used `sift.m` and `siftWin32.exe` as core part of SIFT Features and Descriptors.  **Please use Demo carefully, the author has the patent of Demo Software.**
 
 My work is only to show descriptors  on the image by using SIFT Demo. 
 
