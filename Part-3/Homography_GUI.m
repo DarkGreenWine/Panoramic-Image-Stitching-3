@@ -22,7 +22,7 @@ function varargout = Homography_GUI(varargin)
 
 % Edit the above text to modify the response to help Homography_GUI
 
-% Last Modified by GUIDE v2.5 15-Sep-2019 15:15:16
+% Last Modified by GUIDE v2.5 15-Sep-2019 20:41:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -152,7 +152,7 @@ for i = 1:4
                     0 0 0 x1(i) y1(i) 1 -y2(i)*x1(i) -y2(i)*y1(i) -y2(i)];
 end
 [~,~,V] = svd(A);
-p = V(:,9)
+p = V(:,9);
 h = reshape(p,3,3)/p(9);
 h(1:2,3) = 0;
 axes(handles.axes3);
@@ -583,3 +583,12 @@ guidata(hObject,handles)
 axes(handles.axes2);
 imshow(handles.image2);
 axis on
+
+
+% --- Executes during object creation, after setting all properties.
+function axes3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate axes3
