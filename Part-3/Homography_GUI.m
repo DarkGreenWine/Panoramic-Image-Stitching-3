@@ -154,12 +154,18 @@ end
 [~,~,V] = svd(A);
 p = V(:,9);
 h = reshape(p,3,3)/p(9);
-h(1:2,3) = 0;
 axes(handles.axes3);
-tform = affine2d(h);
+% MY BLOOD LESSEON:
+%   DONT USE affine2d
+%   dont make h[1:2.3]=0, it will become affine2d.!!!!!
+%   That will lose information that makes projective vianish into a
+%   point!!!
+tform = projective2d(h);
 J = imwarp(handles.image1,tform);
 imshow(J)
 axis on
+% figure();imshow(J);
+% axis on
 
 
 function x11_Callback(hObject, eventdata, handles)
