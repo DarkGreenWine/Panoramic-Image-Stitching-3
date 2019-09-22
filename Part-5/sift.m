@@ -27,6 +27,7 @@ if ndims(image) == 3
    image = rgb2gray(image);
 end
 
+
 [rows, cols] = size(image); 
 
 % Convert into PGM imagefile, readable by "keypoints" executable

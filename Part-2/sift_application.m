@@ -13,7 +13,7 @@ myshowkeys(image, cimage, locs, descriptors)
 %     locs: matrix where each row gives the keypoint location (row, column,
 %     scale, rotation) info.
 %     descrpitor: matrix where each row gives the keyoint 
-function myshowkeys(image,cimage, locs, descriptors)
+function myshowkeys(image, cimage, locs, descriptors)
 
 disp('Drawing SIFT keypoints ...');
 

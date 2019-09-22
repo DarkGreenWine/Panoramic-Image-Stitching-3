@@ -43,6 +43,5 @@ J = imwarp(image1,tform1); % I used my h not the offical one.
 figure();imshow(J);
 axis on
 
-% STICTHING
 
 
