@@ -1,31 +1,27 @@
-im1 = 'im01.jpg';
+%[best_H] = H_finder(image_file1,image_file2)
+%
+% This is function to find best homography matrix from image1 to image2
+%   Input parameters:
+%     im1: the matrix of image1.
+%     im2: the matrix of image2.
+%   Returned:
+%     best_H: the best homography matrix from image1 to image2
+
+function [best_H] = H_finder(im1,im2)
 [~, des1, loc1] = sift(im1);
-im1 = imread(im1);
-im2 = 'im02.jpg';
 [~, des2, loc2] = sift(im2);
-im2 = imread(im2);
-
-rows1 = size(im1,1);
-rows2 = size(im2,1);
-
-if (rows1 < rows2)
-     im1(rows2,1) = 0;
-else
-     im2(rows1,1) = 0;
-end
-% appending two images
-im3 = [im1 im2]; 
-
 % using cosine similarity to measure the match descriptors
 % this is very smart to save the time for calculting the distance
- 
+
 match = zeros(size(des1,1),1);
 for i=1:size(des1,1)
     dists = des1(i,:)*des2.';
-    [vals, idx] = sort(dists,'descend');
+    [~, idx] = sort(dists,'descend');
+    
     % I used similarity threshold to drop match
     % I think my method is more clear
     
+    %[vals, idx] = sort(dists,'descend');
 %     % 1. vals > 0.972 to match 
 %     %   this threshold is chosen manually by leaving about 100 candidate
 %     % 2. 0.95*vals(1)>vals(2) to avoid disturbance
@@ -45,19 +41,6 @@ for i=1:size(des1,1)
         match(i) = idx(1);
     end
 end
-
-% Show a figure with lines joining the accepted matches.
-figure('Position', [100 100 size(im3,2) size(im3,1)]);
-imagesc(im3);
-hold on;
-cols1 = size(im1,2);
-for i = 1: size(des1,1)
-  if (match(i) > 0)
-    line([loc1(i,2) loc2(match(i),2)+cols1], ...
-         [loc1(i,1) loc2(match(i),1)], 'Color', 'c');
-  end
-end
-hold off;
 num = sum(match > 0);
 fprintf('Found %d matches.\n', num);
 
@@ -66,7 +49,7 @@ best_H = 0;
 best_count = 0;
 match_idx = find(match>0);
 % iteration
-for iter=1:2000
+for iter=1:10000
     idx = randsample(match_idx,5);
     y1 = loc1(idx,1);
     x1 = loc1(idx,2);
@@ -86,7 +69,6 @@ for iter=1:2000
         v1 = loc1(i,2:-1:1);
         v2 = loc2(match(i),2:-1:1);
         v1 = [v1 1]*H;
-        scale = 1/v1(3);
         v1 = v1(1:2)/v1(3);
         if norm(v1-v2, 2) < 1
             inliers_count = inliers_count + 1;
@@ -97,36 +79,6 @@ for iter=1:2000
        best_H = H;
     end
 end
+fprintf('Found %d inliner matches.\n', best_count);
 
-% inliers match
-best_match = match;
-inliers_count = 0;
-for i = match_idx.'
-        v1 = loc1(i,2:-1:1);
-        v2 = loc2(match(i),2:-1:1);
-        v1 = [v1 1]*best_H;
-        v1 = v1(1:2)/v1(3);
-        % tolerance can not be really small, or you only get dots
-        if norm(v1-v2, 2) > 1
-            best_match(i) = 0;
-        end
-end 
 
-% Show a figure with lines joining inlier matches.
-figure('Position', [100 100 size(im3,2) size(im3,1)]);
-imagesc(im3);
-hold on;
-cols1 = size(im1,2);
-for i = 1: size(des1,1)
-  if (best_match(i) > 0)
-    line([loc1(i,2) loc2(best_match(i),2)+cols1], ...
-         [loc1(i,1) loc2(best_match(i),1)], 'Color', 'c');
-  end
-end
-hold off;
-inlier_num = sum(best_match > 0);
-fprintf('Found %d inliner matches.\n', inlier_num);
-
-% Homography
-tform1 = projective2d(best_H);
-J = imwarp(im1,tform1);

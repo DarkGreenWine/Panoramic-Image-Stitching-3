@@ -1,9 +1,14 @@
-im1 = 'im01.jpg';
+% im1 = 'im05.jpg';
+% im1 = imread(im1);
+% [~, des1, loc1] = sift(im1);
+% im2 = 'im04.jpg';
+% im2 = imread(im2);
+% [~, des2, loc2] = sift(im2);
+im1 = im543;
+im2 = im12;
 [~, des1, loc1] = sift(im1);
-im1 = imread(im1);
-im2 = 'im02.jpg';
 [~, des2, loc2] = sift(im2);
-im2 = imread(im2);
+
 
 rows1 = size(im1,1);
 rows2 = size(im2,1);
@@ -66,7 +71,7 @@ best_H = 0;
 best_count = 0;
 match_idx = find(match>0);
 % iteration
-for iter=1:2000
+for iter=1:10000
     idx = randsample(match_idx,5);
     y1 = loc1(idx,1);
     x1 = loc1(idx,2);
