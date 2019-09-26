@@ -24,3 +24,5 @@ H54312 = H_finder(im543,im12);
 [row,col] = find(sum(im12543,3)~=0);
 im_pan = im12543(min(row):max(row),min(col):max(col),:);
 figure();imshow(im_pan)
+
+
