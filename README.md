@@ -41,7 +41,7 @@ In the GUI:
 
 ​	6. Click 'choose points 2' to choose 4 reference points in image2
 
-	7. Click 'Transform 1 to 2' to see the result.
+​	7. Click 'Transform 1 to 2' to see the result.
 
 ## Part-4 Manual Homography + Sticthing
 
